@@ -25,19 +25,19 @@ cfuser=
 cfkey=
 #Zone ID from zone overview page
 cfzonekey0=
-#cfzonekey1=
+cfzonekey1=edit_this
 #Name of the host entry
 cfhost0=
-#cfhost1=
+cfhost1=
 #ID of the host entry (run cf-ddns-read.sh)
 cfhostkey0=
-#cfhostkey1=
+cfhostkey1=
 #=automatic - needs to be set in curl request otherwise reverts to a default. Set to the correct value
 cfttl0=120
-#cfttl1=120
+cfttl1=120
 # also needs to eb set in curl request otherwise reverts to false. Set to the correct value
 cfproxied0=false 
-#cfproxied1=true
+cfproxied1=true
 #Set to desired log output location
 log=/var/log/cf-ddns-update.log 
 
@@ -58,21 +58,26 @@ else
         echo "Updating DNS to $WAN_IP" >> $log
 #add script here running after update ddns-ip 
 #	bash /usr/src/aabbcc.sh
+
 data0="{\"type\":\"A\",\"name\":\"$cfhost0\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl0,\"proxied\":$cfproxied0}"
 echo "data: $data0" >> $log
 
 curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey0/dns_records/$cfhostkey0" \
-	-H "X-Auth-Key: $cfkey0" \
-	-H "X-Auth-Email: $cfuser0" \
+	-H "X-Auth-Key: $cfkey" \
+	-H "X-Auth-Email: $cfuser" \
 	-H "Content-Type: application/json" \
 	--data $data0 >> $log
 
+if [ "$cfzonekey1" = "edit_this" ]; then
+        echo  "No More Domains" >> $log
+else
 data="{\"type\":\"A\",\"name\":\"$cfhost1\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl1,\"proxied\":$cfproxied1}"
 echo "data: $data1" >> $log
 
 curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey1/dns_records/$cfhostkey1" \
-	-H "X-Auth-Key: $cfkey1" \
-	-H "X-Auth-Email: $cfuser1" \
+	-H "X-Auth-Key: $cfkey" \
+	-H "X-Auth-Email: $cfuser" \
 	-H "Content-Type: application/json" \
 	--data $data1 >> $log
+fi
 fi
