@@ -13,10 +13,14 @@
 # Use strictly at your own risk
 
 #Set values below
-cfuser= #Account user name
-cfkey= #Global API Key from My Account > API Keys
-cfzonekey= #Zone ID from zone overview page
-cfhost= #Name of the host entry
+#Account user name
+cfuser=
+#Global API Key from My Account > API Keys
+cfkey=
+#Zone ID from zone overview page
+cfzonekey=
+#Name of the host entry
+cfhost=
 
 curl -X GET "https://api.cloudflare.com/client/v4/zones/$cfzonekey/dns_records?type=A&name=$cfhost" \
   -H "X-Auth-Key: $cfkey " \
