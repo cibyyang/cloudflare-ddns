@@ -25,16 +25,21 @@ cfuser=
 cfkey=
 #Zone ID from zone overview page
 cfzonekey=
+#cfzonekey=
 #Name of the host entry
 cfhost=
+#cfhost=
 #ID of the host entry (run cf-ddns-read.sh)
 cfhostkey=
+#cfhostkey=
 #=automatic - needs to be set in curl request otherwise reverts to a default. Set to the correct value
 cfttl=1
+#cfttl=1
 # also needs to eb set in curl request otherwise reverts to false. Set to the correct value
-cfproxied=true 
-
-log=/var/log/cf-ddns-update.log #Set to desired log output location
+cfproxied=false 
+#cfproxied=true
+#Set to desired log output location
+log=/var/log/cf-ddns-update.log 
 
 date +"%F %T" >> $log
 
@@ -62,4 +67,12 @@ curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey/dns_records/$
 	-H "Content-Type: application/json" \
 	--data $data >> $log
 
+data="{\"type\":\"A\",\"name\":\"$cfhost\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl,\"proxied\":$cfproxied}"
+echo "data: $data" >> $log
+
+curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey/dns_records/$cfhostkey" \
+	-H "X-Auth-Key: $cfkey" \
+	-H "X-Auth-Email: $cfuser" \
+	-H "Content-Type: application/json" \
+	--data $data >> $log
 fi
