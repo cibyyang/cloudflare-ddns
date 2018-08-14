@@ -24,20 +24,20 @@ cfuser=
 #Global API Key from My Account > API Keys
 cfkey=
 #Zone ID from zone overview page
-cfzonekey=
-#cfzonekey=
+cfzonekey0=
+#cfzonekey1=
 #Name of the host entry
-cfhost=
-#cfhost=
+cfhost0=
+#cfhost1=
 #ID of the host entry (run cf-ddns-read.sh)
-cfhostkey=
-#cfhostkey=
+cfhostkey0=
+#cfhostkey1=
 #=automatic - needs to be set in curl request otherwise reverts to a default. Set to the correct value
-cfttl=1
-#cfttl=1
+cfttl0=120
+#cfttl1=120
 # also needs to eb set in curl request otherwise reverts to false. Set to the correct value
-cfproxied=false 
-#cfproxied=true
+cfproxied0=false 
+#cfproxied1=true
 #Set to desired log output location
 log=/var/log/cf-ddns-update.log 
 
@@ -58,21 +58,21 @@ else
         echo "Updating DNS to $WAN_IP" >> $log
 #add script here running after update ddns-ip 
 #	bash /usr/src/aabbcc.sh
-data="{\"type\":\"A\",\"name\":\"$cfhost\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl,\"proxied\":$cfproxied}"
-echo "data: $data" >> $log
+data0="{\"type\":\"A\",\"name\":\"$cfhost0\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl0,\"proxied\":$cfproxied0}"
+echo "data: $data0" >> $log
 
-curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey/dns_records/$cfhostkey" \
-	-H "X-Auth-Key: $cfkey" \
-	-H "X-Auth-Email: $cfuser" \
+curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey0/dns_records/$cfhostkey0" \
+	-H "X-Auth-Key: $cfkey0" \
+	-H "X-Auth-Email: $cfuser0" \
 	-H "Content-Type: application/json" \
-	--data $data >> $log
+	--data $data0 >> $log
 
-data="{\"type\":\"A\",\"name\":\"$cfhost\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl,\"proxied\":$cfproxied}"
-echo "data: $data" >> $log
+data="{\"type\":\"A\",\"name\":\"$cfhost1\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl1,\"proxied\":$cfproxied1}"
+echo "data: $data1" >> $log
 
-curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey/dns_records/$cfhostkey" \
-	-H "X-Auth-Key: $cfkey" \
-	-H "X-Auth-Email: $cfuser" \
+curl -X PUT "https://api.cloudflare.com/client/v4/zones/$cfzonekey1/dns_records/$cfhostkey1" \
+	-H "X-Auth-Key: $cfkey1" \
+	-H "X-Auth-Email: $cfuser1" \
 	-H "Content-Type: application/json" \
-	--data $data >> $log
+	--data $data1 >> $log
 fi
