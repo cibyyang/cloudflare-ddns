@@ -19,13 +19,20 @@
 #
 # Use strictly at your own risk
 
-cfuser= #Account user name
-cfkey= #Global API Key from My Account > API Keys
-cfzonekey= #Zone ID from zone overview page
-cfhost= #Name of the host entry
-cfhostkey= #ID of the host entry (run cf-ddns-read.sh)
-cfttl=1 #=automatic - needs to be set in curl request otherwise reverts to a default. Set to the correct value
-cfproxied=true # also needs to eb set in curl request otherwise reverts to false. Set to the correct value
+#Account user name
+cfuser=
+#Global API Key from My Account > API Keys
+cfkey=
+#Zone ID from zone overview page
+cfzonekey=
+#Name of the host entry
+cfhost=
+#ID of the host entry (run cf-ddns-read.sh)
+cfhostkey=
+#=automatic - needs to be set in curl request otherwise reverts to a default. Set to the correct value
+cfttl=1
+# also needs to eb set in curl request otherwise reverts to false. Set to the correct value
+cfproxied=true 
 
 log=/var/log/cf-ddns-update.log #Set to desired log output location
 
@@ -44,7 +51,8 @@ if [ "$WAN_IP" = "$OLD_WAN_IP" ]; then
 else
         echo $WAN_IP > wan_ip-cf.txt
         echo "Updating DNS to $WAN_IP" >> $log
-
+#add script here running after update ddns-ip 
+#	bash /usr/src/aabbcc.sh
 data="{\"type\":\"A\",\"name\":\"$cfhost\",\"content\":\"$WAN_IP\",\"ttl\":$cfttl,\"proxied\":$cfproxied}"
 echo "data: $data" >> $log
 
